@@ -1,0 +1,82 @@
+[CIVILIZACION]
+NOMBRE: Civilización Sumeria
+REGION: Mesopotamia (actual Irak)
+EPOCA: c. 3500–2000 a.C.
+DESCRIPCION: Primera civilización urbana conocida; desarrolló ciudades-estado como Ur y Uruk, sistemas de irrigación, leyes y religión politeísta.
+FOTO: sumeria.jpeg
+[PERSONAJES]
+PERSONAJE|Enheduanna|2300-01-01|Sacerdotisa y poetisa, primera autora conocida por nombre.|enheduanna.jpeg
+[EVENTOS]
+EVENTO|Invención de la escritura cuneiforme|3400-01-01|Desarrollo de la escritura cuneiforme en tablillas de arcilla, primera forma de escritura del mundo.
+[/CIVILIZACION]
+
+[CIVILIZACION]
+NOMBRE: Antiguo Egipto
+REGION: Valle del Nilo (Egipto)
+EPOCA: c. 3100–30 a.C.
+DESCRIPCION: Sociedad altamente organizada con faraones considerados dioses, destacando en arquitectura, medicina y astronomía.
+FOTO: egipto.jpg
+[PERSONAJES]
+PERSONAJE|Imhotep|2650-01-01|Arquitecto de la pirámide escalonada de Djoser, también médico y sacerdote.|imhotep.jpg
+[EVENTOS]
+EVENTO|Construcción de las Pirámides de Giza|2560-01-01|Construcción de las grandes pirámides de Keops, Kefrén y Micerino.
+[/CIVILIZACION]
+
+[CIVILIZACION]
+NOMBRE: Civilización del Valle del Indo (Harappa)
+REGION: Subcontinente indio (actual Pakistán y noroeste de India)
+EPOCA: c. 2600–1900 a.C.
+DESCRIPCION: Una de las primeras civilizaciones urbanas del mundo; con calles en cuadrícula y drenaje avanzado.
+FOTO: harappa.jpg
+[PERSONAJES]
+[EVENTOS]
+EVENTO|Desarrollo urbano planificado (Mohenjo-Daro y Harappa)|2500-01-01|Creación de ciudades con planificación urbana avanzada: calles en cuadrícula, alcantarillado y viviendas estandarizadas.
+[/CIVILIZACION]
+
+[CIVILIZACION]
+NOMBRE: Dinastía Shang (Antigua China)
+REGION: Cuenca del río Amarillo (China)
+EPOCA: c. 1600–1046 a.C.
+DESCRIPCION: Primera dinastía china con evidencia escrita; desarrollo del bronce y rituales ancestrales.
+FOTO: shang.jpg
+[PERSONAJES]
+PERSONAJE|Fu Hao|1200-01-01|Generala y sacerdotisa, una de las mujeres más poderosas de la dinastía Shang.|fu_hao.jpg
+[EVENTOS]
+EVENTO|Uso de huesos oraculares con caracteres chinos tempranos|1500-01-01|Inscripción de preguntas a los ancestros en caparazones de tortuga y huesos de animales — origen de la escritura china.
+[/CIVILIZACION]
+
+[CIVILIZACION]
+NOMBRE: Civilización Olmeca
+REGION: Golfo de México (actual Veracruz y Tabasco)
+EPOCA: c. 1500–400 a.C.
+DESCRIPCION: Considerada la cultura madre de Mesoamérica; influyó en calendarios y simbología religiosa.
+FOTO: olmeca.jpg
+[PERSONAJES]
+[EVENTOS]
+EVENTO|Creación de las cabezas colosales de basalto|1000-01-01|Tallado y transporte de monumentales cabezas de basalto, símbolo del poder olmeca.
+[/CIVILIZACION]
+
+[CIVILIZACION]
+NOMBRE: Grecia Antigua (período Clásico)
+REGION: Península de los Balcanes (Grecia)
+EPOCA: c. 500–323 a.C.
+DESCRIPCION: Desarrollo de la filosofía, el teatro, la ciencia y la democracia directa.
+FOTO: grecia.jpg
+[PERSONAJES]
+PERSONAJE|Sócrates|470-01-01|Filósofo ateniense, fundador del método dialéctico y maestro de Platón.|socrates.jpeg
+[EVENTOS]
+EVENTO|Guerras Médicas y auge de la democracia ateniense|490-01-01|Victoria griega sobre Persia y consolidación del sistema democrático en Atenas bajo Pericles.
+[/CIVILIZACION]
+
+[CIVILIZACION]
+NOMBRE: Imperio Romano
+REGION: Cuenca del Mediterráneo
+EPOCA: 753 a.C. – 476 d.C.
+DESCRIPCION: La civilización que estableció bases del derecho, la ingeniería y la administración occidental.
+FOTO: roma.jpeg
+[PERSONAJES]
+PERSONAJE|Julio César|100-01-01|Dictador romano, general y escritor, clave en la transición de la República al Imperio.|julio_cesar.jpg
+[EVENTOS]
+EVENTO|Fundación de Roma y expansión imperial|0753-01-01|Fundación legendaria de Roma (753 a.C.) y posterior expansión hasta convertirse en el mayor imperio mediterráneo.
+[/CIVILIZACION]
+
