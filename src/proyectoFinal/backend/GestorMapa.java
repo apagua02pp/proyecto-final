@@ -15,8 +15,6 @@ public class GestorMapa {
         cargarDatos();
     }
 
-    // --- MÉTODOS DE LÓGICA ---
-
     /**
      * Vincula una región del mapa con una civilización.
      */
@@ -47,8 +45,6 @@ public class GestorMapa {
     public boolean estaOcupada(int indiceRegion) {
         return relaciones.containsKey(indiceRegion);
     }
-
-    // --- PERSISTENCIA (GUARDAR/CARGAR) ---
 
     private void guardarDatos() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARCHIVO_DATOS))) {
