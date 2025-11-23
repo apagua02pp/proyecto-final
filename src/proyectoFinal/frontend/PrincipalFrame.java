@@ -23,7 +23,7 @@ public class PrincipalFrame extends JFrame {
     private void initUI() {
         setTitle("Enciclopedia Histórica - " + usuario.getNombreUsuario());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
+        setSize(1000, 800);
         setLocationRelativeTo(null);
 
         JMenuBar menuBar = new JMenuBar();
@@ -36,6 +36,14 @@ public class PrincipalFrame extends JFrame {
             revalidate();
         });
         menuCivilizaciones.add(itemVerTodas);
+        
+        JMenuItem itemMapa = new JMenuItem("Mapa Global"); 
+        itemMapa.addActionListener(e -> { 
+            MapaPanel panelMapa = new MapaPanel(gestor, usuario, esAdmin); 
+            setContentPane(panelMapa);                    
+            revalidate();                             
+        });                                                 
+        menuCivilizaciones.add(itemMapa);
 
         if (esAdmin) {
             JMenuItem itemAdmin = new JMenuItem("Administración");
