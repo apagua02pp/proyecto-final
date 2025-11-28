@@ -48,7 +48,7 @@ public class DetalleCivilizacionPanel extends FondoPanel {  // ✅ HEREDA DE Fon
             String ruta = ImageUploader.getRutaCompleta(foto);
             if (ruta != null && new File(ruta).exists()) {
                 ImageIcon icon = new ImageIcon(ruta);
-                Image img = icon.getImage().getScaledInstance(400, 250, java.awt.Image.SCALE_SMOOTH);
+                Image img = icon.getImage().getScaledInstance(200, 150, java.awt.Image.SCALE_SMOOTH);
                 JLabel lblImg = new JLabel(new ImageIcon(img));
                 lblImg.setBorder(BorderFactory.createEtchedBorder());
                 lblImg.setOpaque(false);

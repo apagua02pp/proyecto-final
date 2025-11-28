@@ -2,12 +2,13 @@ package proyectoFinal.backend;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.Map;
 
 public class GestorMapa {
-    // Archivo donde guardaremos las relaciones (región -> civilización)
-    private static final String ARCHIVO_DATOS = "datos/mapa_relaciones.dat";
+	//genera el archivo donde guarda la relacion indice/civilización 
+    private static final String ARCHIVO_DATOS = "datos/mapa_relaciones.txt";
     
-    // Mapa: Clave (Índice de la región en la imagen) -> Valor (Nombre de la Civilización)
+    //relaciona el indice con el numero de civilización
     private HashMap<Integer, String> relaciones;
 
     public GestorMapa() {
@@ -15,57 +16,69 @@ public class GestorMapa {
         cargarDatos();
     }
 
-    /**
-     * Vincula una región del mapa con una civilización.
-     */
+
     public void asignarCivilizacion(int indiceRegion, String nombreCivilizacion) {
         relaciones.put(indiceRegion, nombreCivilizacion);
         guardarDatos();
     }
 
-    /**
-     * Obtiene el nombre de la civilización asignada a una región.
-     * Retorna null si la región está vacía.
-     */
     public String obtenerCivilizacion(int indiceRegion) {
         return relaciones.get(indiceRegion);
     }
 
-    /**
-     * Elimina la asignación de una región.
-     */
     public void eliminarAsignacion(int indiceRegion) {
         relaciones.remove(indiceRegion);
         guardarDatos();
     }
 
-    /**
-     * Verifica si una región ya tiene dueño.
-     */
     public boolean estaOcupada(int indiceRegion) {
         return relaciones.containsKey(indiceRegion);
     }
 
+
+
     private void guardarDatos() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARCHIVO_DATOS))) {
-            oos.writeObject(relaciones);
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(ARCHIVO_DATOS))) {
+            for (Map.Entry<Integer, String> entry : relaciones.entrySet()) {
+                //guarda indice/civilización
+
+                bw.write(entry.getKey() + "|" + entry.getValue());
+                bw.newLine(); 
+            }
         } catch (IOException e) {
-            System.err.println("Error al guardar datos del mapa: " + e.getMessage());
+            System.err.println("Error al guardar mapa txt: " + e.getMessage());
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void cargarDatos() {
         File archivo = new File(ARCHIVO_DATOS);
-        if (archivo.exists()) {
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
-                relaciones = (HashMap<Integer, String>) ois.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                System.err.println("Error al cargar datos del mapa: " + e.getMessage());
-            }
-        } else {
-            // Asegurar que la carpeta exista
+        if (!archivo.exists()) {
+            //crear la carpeta en caso de que no exista para asegurar el funcinamiento
             new File("datos").mkdirs();
+            return; 
+        }
+
+        //lee el texto línea por línea
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                // Separamos usando el caracter '|'
+            
+                String[] partes = linea.split("\\|");
+                
+                if (partes.length >= 2) {
+                    try {
+                        int idRegion = Integer.parseInt(partes[0]);
+                        String nombreCiv = partes[1];
+                        relaciones.put(idRegion, nombreCiv);
+                    } catch (NumberFormatException e) {
+                        System.err.println("Línea corrupta en mapa ignorada: " + linea);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error al cargar mapa txt: " + e.getMessage());
         }
     }
 }

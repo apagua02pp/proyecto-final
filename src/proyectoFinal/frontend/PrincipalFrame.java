@@ -62,8 +62,8 @@ public class PrincipalFrame extends JFrame {
 
         JLabel lblBienvenida = new JLabel(
             "<html><center>" +
-            "<h2 style='color:white; text-shadow: 2px 2px 4px #000;'>¡Bienvenido, " + usuario.getNombreUsuario() + "!</h2>" +
-            "<p style='color:#ddd;'>Explora civilizaciones históricas y sus legados.</p>" +
+            "<h2 style='color:Black; text-shadow: 2px 2px 4px #000;'>¡Bienvenido, " + usuario.getNombreUsuario() + "!</h2>" +
+            "<p style='color:Black;'>Explora civilizaciones históricas y sus legados.</p>" +
             (esAdmin ? "<p style='color:#ffeb3b;'>🔹 Eres administrador</p>" : "") +
             "</center></html>",
             SwingConstants.CENTER

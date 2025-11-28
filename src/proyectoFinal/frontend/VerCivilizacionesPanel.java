@@ -36,7 +36,10 @@ public class VerCivilizacionesPanel extends FondoPanel {  // ✅ HEREDA DE Fondo
         lista.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lista.setFont(new Font("Monospaced", Font.PLAIN, 14));
         lista.setOpaque(false); // ✅ Transparente
-        lista.setBackground(new Color(0, 0, 0, 0)); // ✅ Fondo transparente
+        lista.setBackground(new Color(0, 0, 0, 128)); // ✅ Fondo transparente
+        lista.setForeground(Color.WHITE);
+        DefaultListCellRenderer renderer = (DefaultListCellRenderer) lista.getCellRenderer();
+        renderer.setHorizontalAlignment(SwingConstants.CENTER);
 
         // ScrollPane (transparente)
         JScrollPane scroll = new JScrollPane(lista);

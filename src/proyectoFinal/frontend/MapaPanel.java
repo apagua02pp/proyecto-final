@@ -9,7 +9,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
+
+// ✅ IMPORTACIONES NUEVAS NECESARIAS PARA QUE "normalizar" FUNCIONE
+import java.text.Normalizer;
+import java.util.regex.Pattern;
 
 public class MapaPanel extends FondoPanel {
 
@@ -39,11 +44,15 @@ public class MapaPanel extends FondoPanel {
     private void initUI() {
         setLayout(new BorderLayout());
 
+        // =======================================================
+        // 1. PANEL SUPERIOR
+        // =======================================================
         JPanel panelNorte = new JPanel();
         panelNorte.setLayout(new BoxLayout(panelNorte, BoxLayout.Y_AXIS));
         panelNorte.setOpaque(false);
         panelNorte.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        // --- BARRA DE BÚSQUEDA ---
         JPanel panelBuscador = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelBuscador.setOpaque(false);
         
@@ -55,6 +64,8 @@ public class MapaPanel extends FondoPanel {
         
         popupSugerencias = new JPopupMenu();
         popupSugerencias.setFocusable(false);
+
+        // Configurar Autocompletado
         configurarAutocompletado();
         
         ActionListener accionBuscar = e -> realizarBusqueda(txtBusqueda.getText().trim());
@@ -70,6 +81,8 @@ public class MapaPanel extends FondoPanel {
         panelBuscador.add(btnBuscar);
         
         panelNorte.add(panelBuscador);
+
+        // --- INSTRUCCIONES ---
         lblInstruccion = new JLabel("Haz clic en una región del mapa para ver detalles", SwingConstants.CENTER);
         lblInstruccion.setFont(new Font("Arial", Font.PLAIN, 14));
         lblInstruccion.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -80,9 +93,15 @@ public class MapaPanel extends FondoPanel {
         
         add(panelNorte, BorderLayout.NORTH);
 
+        // =======================================================
+        // 2. COMPONENTE DEL MAPA
+        // =======================================================
         componenteMapa = new AreaMapaComponente("recursos/mapa.png");
         add(componenteMapa, BorderLayout.CENTER);
 
+        // =======================================================
+        // 3. PANEL DE HERRAMIENTAS (SOLO ADMIN)
+        // =======================================================
         if (esAdmin) {
             JPanel panelAdmin = new JPanel();
             panelAdmin.setOpaque(false);
@@ -102,13 +121,16 @@ public class MapaPanel extends FondoPanel {
         }
     }
 
+    // ========================================================================
+    // ✅ AUTOCOMPLETADO
+    // ========================================================================
     private void configurarAutocompletado() {
         txtBusqueda.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_ESCAPE) return;
 
-                String textoEscrito = txtBusqueda.getText().trim().toLowerCase();
+                String textoEscrito = normalizar(txtBusqueda.getText()); // Usamos normalizar aquí también
                 popupSugerencias.setVisible(false);
                 popupSugerencias.removeAll();
 
@@ -117,30 +139,27 @@ public class MapaPanel extends FondoPanel {
                 List<String> sugerencias = new ArrayList<>();
                 List<Civilizacion> todas = gestorPrincipal.getCivilizaciones();
 
-                // Buscar en Nombres de Civilizaciones
                 for (Civilizacion c : todas) {
-                    if (c.getNombre().toLowerCase().contains(textoEscrito)) {
+                    // Buscar coincidencias normalizadas (sin acentos, minúsculas)
+                    if (normalizar(c.getNombre()).contains(textoEscrito)) {
                         sugerencias.add(c.getNombre() + " (Civilización)");
                     }
-                    // Buscar en Personajes
                     if (c.getPersonaje() != null) {
                         for (Personaje p : c.getPersonaje()) {
-                            if (p.getNombre().toLowerCase().contains(textoEscrito)) {
+                            if (normalizar(p.getNombre()).contains(textoEscrito)) {
                                 sugerencias.add(p.getNombre() + " (Personaje)");
                             }
                         }
                     }
-                    // Buscar en Eventos
                     if (c.getEvento() != null) {
                         for (Evento ev : c.getEvento()) {
-                            if (ev.getTitulo().toLowerCase().contains(textoEscrito)) {
+                            if (normalizar(ev.getTitulo()).contains(textoEscrito)) {
                                 sugerencias.add(ev.getTitulo() + " (Evento)");
                             }
                         }
                     }
                 }
 
-                // Limitar a 6 resultados
                 int limite = 0;
                 for (String sugerencia : sugerencias) {
                     if (limite >= 6) break;
@@ -166,12 +185,14 @@ public class MapaPanel extends FondoPanel {
         });
     }
 
-    //busqueda
+    // ========================================================================
+    // ✅ LÓGICA DE BÚSQUEDA PROFUNDA Y FLEXIBLE
+    // ========================================================================
     private void realizarBusqueda(String texto) {
         if (texto.isEmpty()) return;
-
-        //Intentar buscar Civilización directa
-        Civilizacion civ = gestorPrincipal.buscarCivilizacion(texto);
+        
+        // 1. Intento Rápido (Exacto)
+        Civilizacion civ = gestorPrincipal.buscarCivilizacion(texto.trim());
         if (civ != null) {
             abrirDetalle(civ);
             txtBusqueda.setText(""); 
@@ -179,47 +200,65 @@ public class MapaPanel extends FondoPanel {
             return;
         }
 
-        //Si no es Civ busca dentro de Personajes y Eventos
+        // 2. Intento Flexible (Normalizado - Ignora acentos/mayúsculas)
         Civilizacion encontrada = buscarEntidadGlobal(texto);
         
         if (encontrada != null) {
             abrirDetalle(encontrada);
-            JOptionPane.showMessageDialog(this, 
-                "'" + texto + "' encontrado en la civilización: " + encontrada.getNombre(), 
-                "Resultado Búsqueda", JOptionPane.INFORMATION_MESSAGE);
             txtBusqueda.setText("");
             popupSugerencias.setVisible(false);
         } else {
-            JOptionPane.showMessageDialog(this, "No se encontró nada relacionado con: " + texto, "Búsqueda", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, 
+                "No se encontró nada relacionado con: " + texto, 
+                "Sin resultados", JOptionPane.WARNING_MESSAGE);
         }
     }
 
-    /**
-     * Recorre todas las civilizaciones buscando personajes o eventos que coincidan.
-     */
     private Civilizacion buscarEntidadGlobal(String query) {
-        String queryMin = query.toLowerCase();
+        String queryNorm = normalizar(query); // Convertimos búsqueda a simple (sin acentos)
         
         for (Civilizacion c : gestorPrincipal.getCivilizaciones()) {
-            // Revisar Personajes
+            
+            // 1. Nombre Civilización
+            if (normalizar(c.getNombre()).contains(queryNorm)) {
+                return c;
+            }
+
+            // 2. Personajes
             if (c.getPersonaje() != null) {
                 for (Personaje p : c.getPersonaje()) {
-                    if (p.getNombre().toLowerCase().equals(queryMin)) {
-                        return c; // Retornamos la civ dueña del personaje
+                    if (normalizar(p.getNombre()).contains(queryNorm)) {
+                        return c; 
                     }
                 }
             }
-            // Revisar Eventos
+            // 3. Eventos
             if (c.getEvento() != null) {
                 for (Evento ev : c.getEvento()) {
-                    if (ev.getTitulo().toLowerCase().equals(queryMin)) {
-                        return c; // Retornamos la civ dueña del evento
+                    if (normalizar(ev.getTitulo()).contains(queryNorm)) {
+                        return c; 
                     }
                 }
             }
         }
         return null;
     }
+
+    // ========================================================================
+    // ✅ MÉTODO HELPER (ESTE ERA EL QUE FALTABA O DABA ERROR)
+    // ========================================================================
+    private String normalizar(String input) {
+        if (input == null) return "";
+        // Separa los acentos de las letras (Ej: á -> a + ´)
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        // Borra los acentos usando Regex y convierte a minúsculas
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(normalized).replaceAll("").toLowerCase().trim();
+    }
+
+    // ========================================================================
+    // GESTIÓN DEL MAPA
+    // ========================================================================
 
     private void cambiarModo(Modo nuevoModo, String mensaje) {
         this.modoActual = nuevoModo;
@@ -287,6 +326,9 @@ public class MapaPanel extends FondoPanel {
         frameDetalle.setVisible(true);
     }
 
+    // ====================================================================================
+    // CLASE INTERNA: Componente Mapa
+    // ====================================================================================
     private class AreaMapaComponente extends JComponent {
         private BufferedImage imagenOriginal;
         private ArrayList<Shape> regionesDetectadas;
@@ -376,9 +418,8 @@ public class MapaPanel extends FondoPanel {
 
             g2.drawImage(imagenOriginal, 0, 0, null);
 
-            // HOVER NARANJA
             if (indiceHover != -1 && indiceHover < regionesDetectadas.size()) {
-                g2.setColor(new Color(255, 165, 0, 140)); 
+                g2.setColor(new Color(255, 165, 0, 140)); // Naranja
                 g2.fill(regionesDetectadas.get(indiceHover));
                 g2.setColor(Color.BLACK);
                 g2.setStroke(new BasicStroke(2.0f)); 
