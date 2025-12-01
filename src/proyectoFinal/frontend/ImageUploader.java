@@ -7,28 +7,33 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.awt.Component; // Importante para que funcione con JDialog y JFrame
 
 public class ImageUploader {
 
-    // ✅ Carpeta raíz: ./recursos/ (sin subcarpeta "imagenes")
+    //Carpeta raíz
     private static final String CARPETA_IMAGENES = "recursos";
 
     static {
-        // Crear carpeta si no existe
+        // Crear carpeta si no existe 
         new File(CARPETA_IMAGENES).mkdirs();
     }
 
     /**
      * Abre un diálogo para seleccionar una imagen y la copia a ./recursos/
+     * @param parent Componente padre (puede ser JFrame o JDialog)
      * @return nombre del archivo copiado (ej. "gilgamesh.jpg"), o null si canceló
      */
-    public static String seleccionarYCopiarImagen(JFrame parent) {
+    // CAMBIO AQUÍ: Usamos 'Component' en lugar de 'JFrame'
+    public static String seleccionarYCopiarImagen(Component parent) {
         JFileChooser fc = new JFileChooser();
         fc.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
                 "Imágenes (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif"));
         fc.setAcceptAllFileFilterUsed(false);
 
+        // showOpenDialog acepta 'Component', así que funciona igual
         int result = fc.showOpenDialog(parent);
+        
         if (result == JFileChooser.APPROVE_OPTION) {
             File archivoSeleccionado = fc.getSelectedFile();
             String nombreOriginal = archivoSeleccionado.getName();

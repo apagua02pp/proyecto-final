@@ -8,19 +8,22 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import proyectoFinal.backend.Civilizacion;
+import proyectoFinal.backend.Evento;
+import proyectoFinal.backend.Personaje;
 import proyectoFinal.backend.GestorEnciclopedia;
 import proyectoFinal.backend.Usuario;
 import javax.swing.SwingUtilities;
 
-public class AdminPanel extends FondoPanel { // ✅ Hereda de FondoPanel
+public class AdminPanel extends FondoPanel { 
     private GestorEnciclopedia gestor;
     private JList<String> listaCivilizaciones;
     private DefaultListModel<String> listModel;
     private JLabel lblImagen;
-    private JTextArea txtDetalles;
+    
+    private JTextPane txtDetalles; 
 
     public AdminPanel(GestorEnciclopedia gestor, Usuario usuario) {
-        super(usuario); // ✅ Llama al constructor de FondoPanel
+        super(usuario); 
         this.gestor = gestor;
         initUI();
     }
@@ -29,7 +32,7 @@ public class AdminPanel extends FondoPanel { // ✅ Hereda de FondoPanel
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        // Título
+        // Titulo 
         JLabel lblTitulo = new JLabel("🔧 Administración de Civilizaciones", SwingConstants.CENTER);
         lblTitulo.setFont(lblTitulo.getFont().deriveFont(Font.BOLD, 18f));
         lblTitulo.setOpaque(false);
@@ -40,7 +43,7 @@ public class AdminPanel extends FondoPanel { // ✅ Hereda de FondoPanel
         splitPane.setDividerLocation(300);
         splitPane.setOneTouchExpandable(true);
 
-        // Panel izquierdo: Búsqueda + Lista
+        // Panel izquierdo: Búsqueda y la  Lista
         JPanel panelIzquierdo = new JPanel(new BorderLayout());
         panelIzquierdo.setBorder(BorderFactory.createTitledBorder("Civilizaciones"));
         panelIzquierdo.setOpaque(false);
@@ -70,7 +73,7 @@ public class AdminPanel extends FondoPanel { // ✅ Hereda de FondoPanel
         listaCivilizaciones = new JList<>(listModel);
         listaCivilizaciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listaCivilizaciones.setOpaque(false);
-        listaCivilizaciones.setBackground(new Color(0, 0, 0, 0)); // Transparente
+        listaCivilizaciones.setBackground(new Color(0, 0, 0, 0)); 
         listaCivilizaciones.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 String sel = listaCivilizaciones.getSelectedValue();
@@ -101,14 +104,13 @@ public class AdminPanel extends FondoPanel { // ✅ Hereda de FondoPanel
         panelImagen.setOpaque(false);
         panelImagen.add(lblImagen, BorderLayout.CENTER);
 
-        // Detalles
-        txtDetalles = new JTextArea();
+        // --- CAMBIO 2: Inicialización para soportar HTML ---
+        txtDetalles = new JTextPane();
         txtDetalles.setEditable(false);
-        txtDetalles.setLineWrap(true);
-        txtDetalles.setWrapStyleWord(true);
-        txtDetalles.setFont(new Font("Monospaced", Font.PLAIN, 13));
+        txtDetalles.setContentType("text/html"); // Importante: Activamos modo HTML
         txtDetalles.setOpaque(false);
         txtDetalles.setForeground(Color.BLACK);
+        
         JScrollPane scrollDetalles = new JScrollPane(txtDetalles);
         scrollDetalles.setOpaque(false);
         scrollDetalles.getViewport().setOpaque(false);
@@ -119,34 +121,30 @@ public class AdminPanel extends FondoPanel { // ✅ Hereda de FondoPanel
         panelContenido.add(scrollDetalles);
         panelDerecho.add(panelContenido, BorderLayout.CENTER);
 
-        // Botones inferiores: Agregar, Editar, Eliminar, Salir
+        // Botones inferiores (Tus botones originales)
         JPanel panelBotones = new JPanel(new FlowLayout());
         panelBotones.setOpaque(false);
 
-        // Botón Agregar
         JButton btnAgregar = new JButton("➕ Agregar");
-        btnAgregar.setBackground(new Color(76, 175, 80)); // Verde
+        btnAgregar.setBackground(new Color(76, 175, 80)); 
         btnAgregar.setForeground(Color.WHITE);
         btnAgregar.setFocusPainted(false);
         btnAgregar.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
 
-        // Botón Editar
         JButton btnEditar = new JButton("✏️ Editar");
-        btnEditar.setBackground(new Color(255, 152, 0)); // Naranja
+        btnEditar.setBackground(new Color(255, 152, 0)); 
         btnEditar.setForeground(Color.WHITE);
         btnEditar.setFocusPainted(false);
         btnEditar.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
 
-        // Botón Eliminar
         JButton btnEliminar = new JButton("🗑️ Eliminar");
-        btnEliminar.setBackground(new Color(244, 67, 54)); // Rojo
+        btnEliminar.setBackground(new Color(244, 67, 54)); 
         btnEliminar.setForeground(Color.WHITE);
         btnEliminar.setFocusPainted(false);
         btnEliminar.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
 
-        // Botón Salir
         JButton btnSalir = new JButton("🚪 Salir");
-        btnSalir.setBackground(new Color(158, 158, 158)); // Gris
+        btnSalir.setBackground(new Color(158, 158, 158)); 
         btnSalir.setForeground(Color.WHITE);
         btnSalir.setFocusPainted(false);
         btnSalir.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
@@ -202,22 +200,22 @@ public class AdminPanel extends FondoPanel { // ✅ Hereda de FondoPanel
         gestor.getCivilizaciones().forEach(c -> listModel.addElement(c.getNombre()));
     }
 
+    // --- CAMBIO 3: Lógica para pintar las imágenes en HTML ---
     private void mostrarDetalles(Civilizacion c) {
         if (c == null) {
             limpiarDetalles();
             return;
         }
 
-        // Imagen
+        // Imagen Civilización (JLabel)
         String foto = c.getFotoCiv();
         if (foto != null && !foto.trim().isEmpty()) {
             String ruta = ImageUploader.getRutaCompleta(foto);
             if (ruta != null && new File(ruta).exists()) {
                 ImageIcon icon = new ImageIcon(ruta);
-                java.awt.Image scaled = icon.getImage().getScaledInstance(
-                    200, 200, java.awt.Image.SCALE_SMOOTH
-                );
+                java.awt.Image scaled = icon.getImage().getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH);
                 lblImagen.setIcon(new ImageIcon(scaled));
+                lblImagen.setText("");
             } else {
                 lblImagen.setIcon(null);
                 lblImagen.setText("❌ Imagen no encontrada");
@@ -227,19 +225,50 @@ public class AdminPanel extends FondoPanel { // ✅ Hereda de FondoPanel
             lblImagen.setText("Sin imagen");
         }
 
-        // Texto
-        StringBuilder sb = new StringBuilder();
-        sb.append("📌 Región: ").append(c.getRegion()).append("\n");
-        sb.append("📅 Época: ").append(c.getEpoca()).append("\n");
-        if (c.getEvento() != null && !c.getEvento().isEmpty()) {
-            sb.append("⚡ Evento clave: ").append(c.getEvento().get(0).getTitulo()).append("\n");
-        }
-        if (c.getPersonaje() != null && !c.getPersonaje().isEmpty()) {
-            sb.append("👤 Figura: ").append(c.getPersonaje().get(0).getNombre()).append("\n");
-        }
-        sb.append("📝 Descripción: ").append(c.getDescripcion());
+        // Texto con HTML (Personajes con foto)
+        StringBuilder html = new StringBuilder();
+        html.append("<html><body style='font-family: sans-serif; font-size: 10px;'>");
+        
+        html.append("<b>📌 Región:</b> ").append(c.getRegion()).append("<br>");
+        html.append("<b>📅 Época:</b> ").append(c.getEpoca()).append("<br>");
+        html.append("<b>📝 Descripción:</b> ").append(c.getDescripcion()).append("<br><br>");
 
-        txtDetalles.setText(sb.toString());
+        // Personajes
+        html.append("<hr><b>👤 Personajes:</b><br>");
+        if (c.getPersonaje() != null && !c.getPersonaje().isEmpty()) {
+            for (Personaje p : c.getPersonaje()) {
+                html.append("• <b>").append(p.getNombre()).append("</b><br>");
+                html.append("<i>").append(p.getAportes()).append("</i><br>");
+                
+                // --- AQUÍ MOSTRAMOS LA FOTO DEL PERSONAJE ---
+                String fotoP = p.getFotoPers();
+                if (fotoP != null && !fotoP.isEmpty() && !fotoP.equals("sin_foto") && !fotoP.equals("SinFoto")) {
+                     String rutaP = ImageUploader.getRutaCompleta(fotoP);
+                     File f = new File(rutaP);
+                     if (f.exists()) {
+                         // Usamos f.toURI() para que HTML encuentre la imagen en el disco
+                         html.append("<img src='").append(f.toURI()).append("' width='100'><br>");
+                     }
+                }
+                html.append("<br>");
+            }
+        } else {
+            html.append("<i>(Ninguno)</i><br>");
+        }
+
+        // Eventos
+        html.append("<hr><b>⚡ Eventos:</b><br>");
+        if (c.getEvento() != null && !c.getEvento().isEmpty()) {
+             for (Evento e : c.getEvento()) {
+                 html.append("• <b>").append(e.getTitulo()).append("</b>: ").append(e.getDescripcion()).append("<br>");
+             }
+        } else {
+             html.append("<i>(Ninguno)</i>");
+        }
+
+        html.append("</body></html>");
+        txtDetalles.setText(html.toString());
+        txtDetalles.setCaretPosition(0);
     }
 
     private void limpiarDetalles() {
@@ -278,12 +307,11 @@ public class AdminPanel extends FondoPanel { // ✅ Hereda de FondoPanel
                 String ruta = ImageUploader.getRutaCompleta(img);
                 if (ruta != null && new File(ruta).exists()) {
                     ImageIcon original = new ImageIcon(ruta);
-                    java.awt.Image scaled = original.getImage().getScaledInstance(
-                        150, 150, java.awt.Image.SCALE_SMOOTH
-                    );
+                    java.awt.Image scaled = original.getImage().getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH);
                     lblFoto.setIcon(new ImageIcon(scaled));
+                    lblFoto.setText("");
                 } else {
-                    lblFoto.setText("❌ Imagen no encontrada");
+                    lblFoto.setText("❌ Error img");
                     lblFoto.setIcon(null);
                 }
             }
@@ -301,32 +329,56 @@ public class AdminPanel extends FondoPanel { // ✅ Hereda de FondoPanel
                 String ruta = ImageUploader.getRutaCompleta(foto);
                 if (ruta != null && new File(ruta).exists()) {
                     ImageIcon original = new ImageIcon(ruta);
-                    java.awt.Image scaled = original.getImage().getScaledInstance(
-                        150, 150, java.awt.Image.SCALE_SMOOTH
-                    );
+                    java.awt.Image scaled = original.getImage().getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH);
                     lblFoto.setIcon(new ImageIcon(scaled));
+                    lblFoto.setText("");
                 }
             }
+        }
+
+        // Panel Extras
+        JPanel panelExtras = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        if (c != null) { 
+            JButton btnAddPers = new JButton("👤 +Personaje");
+            JButton btnAddEvt = new JButton("⚡ +Evento");
+
+            btnAddPers.addActionListener(e -> agregarPersonajeDialogo(c));
+            btnAddEvt.addActionListener(e -> agregarEventoDialogo(c));
+
+            panelExtras.add(btnAddPers);
+            panelExtras.add(btnAddEvt);
         }
 
         // Formulario
         JPanel formPanel = new JPanel(new GridLayout(0, 2, 5, 5));
         formPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        
         formPanel.add(new JLabel("Nombre:"));
         formPanel.add(txtNombre);
+        
         formPanel.add(new JLabel("Región:"));
         formPanel.add(txtRegion);
+        
         formPanel.add(new JLabel("Época:"));
         formPanel.add(txtEpoca);
+        
         formPanel.add(new JLabel("Descripción:"));
         formPanel.add(new JScrollPane(txtDescripcion));
+        
         formPanel.add(new JLabel("Foto:"));
         JPanel fotoPanel = new JPanel(new BorderLayout());
         fotoPanel.add(lblFoto, BorderLayout.CENTER);
         fotoPanel.add(btnSubirFoto, BorderLayout.SOUTH);
         formPanel.add(fotoPanel);
 
-        // Botones
+        if (c != null) {
+            formPanel.add(new JLabel("Agregar contenido:"));
+            formPanel.add(panelExtras);
+        } else {
+            formPanel.add(new JLabel("")); 
+            formPanel.add(new JLabel("(Guarda para añadir personajes)"));
+        }
+
         JButton btnGuardar = new JButton("✅ Guardar");
         JButton btnCancelar = new JButton("❌ Cancelar");
 
@@ -355,11 +407,15 @@ public class AdminPanel extends FondoPanel { // ✅ Hereda de FondoPanel
                 c.setEpoca(txtEpoca.getText().trim());
                 c.setDescripcion(txtDescripcion.getText().trim());
                 c.setFotoCiv(fotoRef[0]);
+                
+                gestor.guardarCambios();
                 JOptionPane.showMessageDialog(dialog, "Civilización actualizada.");
             }
 
             actualizarLista();
             dialog.dispose();
+            if(c!=null && listaCivilizaciones.getSelectedValue()!=null 
+               && listaCivilizaciones.getSelectedValue().equals(c.getNombre())) mostrarDetalles(c);
         });
 
         btnCancelar.addActionListener(e -> dialog.dispose());
@@ -369,8 +425,118 @@ public class AdminPanel extends FondoPanel { // ✅ Hereda de FondoPanel
         botones.add(btnGuardar);
         botones.add(btnCancelar);
         dialog.add(botones, BorderLayout.SOUTH);
-        dialog.setSize(500, 420);
+        dialog.setSize(550, 500); 
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
+    }
+
+    // --- CAMBIO 4: Agregar Personaje con FOTO ---
+    private void agregarPersonajeDialogo(Civilizacion c) {
+        JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Nuevo Personaje", true);
+        dialog.setLayout(new BorderLayout());
+        
+        JTextField txtNombre = new JTextField();
+        JTextField txtAportes = new JTextField();
+        JTextField txtFecha = new JTextField("0000-01-01"); 
+
+        // Componentes para la foto
+        JLabel lblFotoP = new JLabel("Sin foto", SwingConstants.CENTER);
+        lblFotoP.setPreferredSize(new Dimension(100, 100));
+        lblFotoP.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        JButton btnFoto = new JButton("📷 Foto");
+        String[] fotoRefP = {"sin_foto"};
+
+        btnFoto.addActionListener(e -> {
+             String img = ImageUploader.seleccionarYCopiarImagen(dialog);
+             if (img != null) {
+                 fotoRefP[0] = img;
+                 String ruta = ImageUploader.getRutaCompleta(img);
+                 if (new File(ruta).exists()) {
+                     ImageIcon original = new ImageIcon(ruta);
+                     lblFotoP.setIcon(new ImageIcon(original.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
+                     lblFotoP.setText("");
+                 }
+             }
+        });
+
+        JPanel form = new JPanel(new GridLayout(0, 2, 5, 5));
+        form.setBorder(new EmptyBorder(10,10,10,10));
+        
+        form.add(new JLabel("Nombre:")); form.add(txtNombre);
+        form.add(new JLabel("Aportes:")); form.add(txtAportes);
+        form.add(new JLabel("Fecha (YYYY-MM-DD):")); form.add(txtFecha);
+        form.add(new JLabel("Foto Personaje:")); 
+        
+        JPanel pFoto = new JPanel(new BorderLayout());
+        pFoto.add(lblFotoP, BorderLayout.CENTER);
+        pFoto.add(btnFoto, BorderLayout.SOUTH);
+        form.add(pFoto);
+
+        JButton btnOk = new JButton("Guardar");
+        btnOk.addActionListener(e -> {
+            try {
+                String nombre = txtNombre.getText();
+                String aportes = txtAportes.getText();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date fecha = sdf.parse(txtFecha.getText());
+
+                // Usamos la foto seleccionada
+                Personaje p = new Personaje(fecha, nombre, aportes, fotoRefP[0]);
+                c.agregarPersonaje(p);
+                
+                gestor.guardarCambios(); 
+                JOptionPane.showMessageDialog(this, "Personaje agregado correctamente.");
+                
+                // Refrescar si estamos viendo esta civilización
+                if(listaCivilizaciones.getSelectedValue() != null && 
+                   listaCivilizaciones.getSelectedValue().equals(c.getNombre())) {
+                    mostrarDetalles(c);
+                }
+                dialog.dispose();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error en la fecha. Usa formato YYYY-MM-DD");
+            }
+        });
+        
+        dialog.add(form, BorderLayout.CENTER);
+        dialog.add(btnOk, BorderLayout.SOUTH);
+        dialog.setSize(400, 400);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
+
+    private void agregarEventoDialogo(Civilizacion c) {
+        JTextField txtTitulo = new JTextField();
+        JTextField txtDesc = new JTextField();
+        JTextField txtFecha = new JTextField("0000-01-01");
+
+        Object[] message = {
+            "Título:", txtTitulo,
+            "Descripción:", txtDesc,
+            "Fecha (YYYY-MM-DD):", txtFecha
+        };
+
+        int option = JOptionPane.showConfirmDialog(null, message, "Nuevo Evento", JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION) {
+            try {
+                String titulo = txtTitulo.getText();
+                String desc = txtDesc.getText();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date fecha = sdf.parse(txtFecha.getText());
+
+                Evento evt = new Evento(fecha, titulo, desc);
+                c.agregarEvento(evt);
+                
+                gestor.guardarCambios(); 
+                JOptionPane.showMessageDialog(this, "Evento agregado correctamente.");
+                
+                if(listaCivilizaciones.getSelectedValue() != null && 
+                   listaCivilizaciones.getSelectedValue().equals(c.getNombre())) {
+                    mostrarDetalles(c);
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error en la fecha. Usa formato YYYY-MM-DD");
+            }
+        }
     }
 }

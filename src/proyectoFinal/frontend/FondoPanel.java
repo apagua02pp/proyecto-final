@@ -20,8 +20,8 @@ public abstract class FondoPanel extends JPanel {
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         } else {
-            // Fondo por defecto (opcional)
-            g.setColor(new Color(245, 248, 255)); // Azul claro suave
+            
+            g.setColor(new Color(245, 248, 255)); 
             g.fillRect(0, 0, getWidth(), getHeight());
         }
     }
@@ -29,7 +29,7 @@ public abstract class FondoPanel extends JPanel {
     @Override
     public void addNotify() {
         super.addNotify();
-        // ✅ AHORA SIEMPRE USA LA MISMA IMAGEN: fondo_general.jpg
+        
         String ruta = "recursos/fondo_general.jpg";
         File file = new File(ruta);
         if (file.exists()) {
