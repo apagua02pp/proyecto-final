@@ -1,0 +1,22 @@
+CIV|Civilización Sumeria|Mesopotamia (actual Irak)|c. 3500–2000 a.C.|Primera civilización urbana conocida; desarrolló ciudades-estado como Ur y Uruk, sistemas de irrigación, leyes y religión politeísta.|sumeria.jpeg
+PERS|Enheduanna|Sacerdotisa y poetisa, primera autora conocida por nombre.|0|enheduanna.jpeg
+EVT|Invención de la escritura cuneiforme|Desarrollo de la escritura cuneiforme en tablillas de arcilla, primera forma de escritura del mundo.|0
+CIV|Antiguo Egipto|Valle del Nilo (Egipto)|c. 3100–30 a.C.|Sociedad altamente organizada con faraones considerados dioses, destacando en arquitectura, medicina y astronomía.|egipto.jpg
+PERS|Imhotep|Arquitecto de la pirámide escalonada de Djoser, también médico y sacerdote.|0|imhotep.jpg
+EVT|Construcción de las Pirámides de Giza|Construcción de las grandes pirámides de Keops, Kefrén y Micerino.|0
+CIV|Civilización del Valle del Indo (Harappa)|Subcontinente indio|c. 2600–1900 a.C.|Una de las primeras civilizaciones urbanas del mundo; con calles en cuadrícula y drenaje avanzado.|harappa.jpg
+EVT|Desarrollo urbano planificado|Creación de ciudades con planificación urbana avanzada: calles en cuadrícula, alcantarillado y viviendas estandarizadas.|0
+CIV|Dinastía Shang (Antigua China)|Cuenca del río Amarillo (China)|c. 1600–1046 a.C.|Primera dinastía china con evidencia escrita; desarrollo del bronce y rituales ancestrales.|shang.jpg
+PERS|Fu Hao|Generala y sacerdotisa, una de las mujeres más poderosas de la dinastía Shang.|0|fu_hao.jpg
+EVT|Uso de huesos oraculares|Inscripción de preguntas a los ancestros en caparazones de tortuga y huesos de animales.|0
+CIV|Civilización Olmeca|Golfo de México|c. 1500–400 a.C.|Considerada la cultura madre de Mesoamérica; influyó en calendarios y simbología religiosa.|olmeca.jpg
+EVT|Creación de las cabezas colosales|Tallado y transporte de monumentales cabezas de basalto, símbolo del poder olmeca.|0
+CIV|Grecia Antigua (período Clásico)|Península de los Balcanes|c. 500–323 a.C.|Desarrollo de la filosofía, el teatro, la ciencia y la democracia directa.|grecia.jpg
+PERS|Sócrates|Filósofo ateniense, fundador del método dialéctico y maestro de Platón.|0|socrates.jpeg
+EVT|Guerras Médicas|Victoria griega sobre Persia y consolidación del sistema democrático en Atenas bajo Pericles.|0
+CIV|Imperio Romano|Cuenca del Mediterráneo|753 a.C. – 476 d.C.|La civilización que estableció bases del derecho, la ingeniería y la administración occidental.|roma.jpeg
+PERS|Julio César|Dictador romano, general y escritor, clave en la transición de la República al Imperio.|0|julio_cesar.jpg
+EVT|Fundación de Roma|Fundación legendaria de Roma (753 a.C.) y posterior expansión hasta convertirse en el mayor imperio mediterráneo.|0
+CIV|Imperio Bizantino|Mediterráneo Oriental|395 d.C. – 1453 d.C.|"Fue la continuación del Imperio Romano en su mitad oriental durante la Edad Media. Su capital fue Constantinopla (actual Estambul). Se caracterizó por su cultura griega, el cristianismo ortodoxo y por preservar el legado grecorromano hasta su caída ante el Imperio Otomano."|Bizantinos_1.jpg
+PERS|Justiniano I|Recopiló todo el derecho romano en el "Corpus Juris Civilis" (base de las leyes actuales), mandó construir la iglesia de Santa Sofía y reconquistó territorios en Italia y África.|-45518176800000|justiniano.jpg
+EVT|Caída de Constantinopla|El Imperio Otomano, liderado por el sultán Mehmed II, toma la capital bizantina tras un asedio de 53 días. Este hecho marca el fin del Imperio Romano de Oriente y de la Edad Media.|-16301325600000
