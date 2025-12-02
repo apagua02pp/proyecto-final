@@ -2,6 +2,7 @@ package proyectoFinal.backend;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.nio.charset.StandardCharsets;
 
 public class GestorEnciclopedia {
 	
@@ -58,11 +59,13 @@ public class GestorEnciclopedia {
 	}
 	
 	private void guardarDatos() {
-	    try (BufferedWriter bw = new BufferedWriter(new FileWriter(ARCHIVO_CIVILIZACIONES))) {
+	    // Usamos OutputStreamWriter para forzar UTF-8
+	    try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
+	            new FileOutputStream(ARCHIVO_CIVILIZACIONES), StandardCharsets.UTF_8))) {
+	        
 	        for (Civilizacion c : civilizaciones) {
-	            // 1. Guardamos la Civilización con la etiqueta |CIV|
 	            StringBuilder lineaCiv = new StringBuilder();
-	            lineaCiv.append("CIV|") // <--- ETIQUETA IMPORTANTE
+	            lineaCiv.append("CIV|")
 	                    .append(c.getNombre()).append("|")
 	                    .append(c.getRegion()).append("|")
 	                    .append(c.getEpoca()).append("|")
@@ -72,26 +75,24 @@ public class GestorEnciclopedia {
 	            bw.write(lineaCiv.toString());
 	            bw.newLine();
 
-	            // 2. Guardamos los Personajes de esta civilización con la etiqueta |PERS|)
 	            if (c.getPersonaje() != null) {
 	                for (Personaje p : c.getPersonaje()) {
 	                    String lineaPers = "PERS|" + 
 	                                       p.getNombre() + "|" +
 	                                       p.getAportes() + "|" +
-	                                       (p.getFechaNac() != null ? p.getFechaNac().getTime() : "0") + "|" + // Guardamos fecha como numero
+	                                       (p.getFechaNac() != null ? p.getFechaNac().getTime() : "0") + "|" + 
 	                                       (p.getFotoPers() != null ? p.getFotoPers() : "SinFoto");
 	                    bw.write(lineaPers);
 	                    bw.newLine();
 	                }
 	            }
 
-	            // 3. Guardamos los Eventos de esta civilización con la etiqueta |EVT|)
 	            if (c.getEvento() != null) {
 	                for (Evento e : c.getEvento()) {
 	                    String lineaEvt = "EVT|" + 
 	                                      e.getTitulo() + "|" +
 	                                      e.getDescripcion() + "|" +
-	                                      (e.getFecha() != null ? e.getFecha().getTime() : "0"); // Guardamos fecha como numero
+	                                      (e.getFecha() != null ? e.getFecha().getTime() : "0");
 	                    bw.write(lineaEvt);
 	                    bw.newLine();
 	                }
@@ -109,14 +110,16 @@ public class GestorEnciclopedia {
 	         return;
 	    }
 
-	    try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+	    // Usamos InputStreamReader para forzar UTF-8
+	    try (BufferedReader br = new BufferedReader(new InputStreamReader(
+	            new FileInputStream(archivo), StandardCharsets.UTF_8))) {
+	        
 	        String linea;
 	        Civilizacion civActual = null; 
 
 	        while ((linea = br.readLine()) != null) {
 	            String[] partes = linea.split("\\|");
 	            
-	            // Si la línea está vacía o incompleta, la saltamos
 	            if (partes.length < 2) continue;
 
 	            try {
@@ -124,12 +127,12 @@ public class GestorEnciclopedia {
 
 	                switch (tipo) {
 	                    case "CIV":
-	                        if (partes.length >= 5) { // Verificamos longitud mínima
+	                        if (partes.length >= 5) { 
 	                            String nombre = partes[1];
 	                            String region = partes[2];
 	                            String epoca = partes[3];
 	                            String descripcion = partes[4];
-	                            String foto = (partes.length > 5) ? partes[5] : ""; // Foto es opcional
+	                            String foto = (partes.length > 5) ? partes[5] : "";
 	                            
 	                            civActual = new Civilizacion(nombre, region, epoca, descripcion, foto, new ArrayList<>(), new ArrayList<>());
 	                            civilizaciones.add(civActual);
@@ -140,7 +143,6 @@ public class GestorEnciclopedia {
 	                        if (civActual != null && partes.length >= 4) {
 	                            String nomPers = partes[1];
 	                            String aportes = partes[2];
-	                            // Usamos try-catch específico por si la fecha no es un número
 	                            long tiempo = Long.parseLong(partes[3]); 
 	                            java.util.Date fecha = new java.util.Date(tiempo);
 	                            String fotoPers = (partes.length > 4) ? partes[4] : "";
@@ -154,7 +156,6 @@ public class GestorEnciclopedia {
 	                        if (civActual != null && partes.length >= 4) {
 	                            String titulo = partes[1];
 	                            String descEvt = partes[2];
-	                            // Aquí es donde te daba el error:
 	                            long tiempoEvt = Long.parseLong(partes[3]);
 	                            java.util.Date fechaEvt = new java.util.Date(tiempoEvt);
 
@@ -163,11 +164,8 @@ public class GestorEnciclopedia {
 	                        }
 	                        break;
 	                }
-	            } catch (NumberFormatException e) {
-	                // Si falla una fecha, mostramos error pero NO detenemos el programa
-	                System.err.println("Error de formato numérico en línea ignorada: " + linea);
 	            } catch (Exception e) {
-	                System.err.println("Error inesperado en línea: " + linea);
+	                System.err.println("Error leyendo línea: " + linea);
 	            }
 	        }
 	    } catch (IOException e) {

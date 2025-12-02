@@ -3,6 +3,7 @@ package proyectoFinal.backend;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.nio.charset.StandardCharsets;
 
 public class GestorMapa {
 	//genera el archivo donde guarda la relacion indice/civilización 
@@ -54,17 +55,16 @@ public class GestorMapa {
     private void cargarDatos() {
         File archivo = new File(ARCHIVO_DATOS);
         if (!archivo.exists()) {
-            //crear la carpeta en caso de que no exista para asegurar el funcinamiento
             new File("datos").mkdirs();
             return; 
         }
 
-        //lee el texto línea por línea
-        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+        //Usamos InputStreamReader para el formata del txt 
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+                new FileInputStream(archivo), StandardCharsets.UTF_8))) {
+                
             String linea;
             while ((linea = br.readLine()) != null) {
-                // Separamos usando el caracter '|'
-            
                 String[] partes = linea.split("\\|");
                 
                 if (partes.length >= 2) {

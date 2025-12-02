@@ -37,6 +37,15 @@ public class PrincipalFrame extends JFrame {
         });
         menuCivilizaciones.add(itemVerTodas);
         
+        JMenuItem itemTiempo = new JMenuItem("⏳ Línea de Tiempo Gráfica");
+        itemTiempo.addActionListener(e -> {
+            // USAMOS EL NUEVO PANEL GRÁFICO
+            LineaTiempoGraficaPanel panel = new LineaTiempoGraficaPanel(gestor, usuario);
+            setContentPane(panel);
+            revalidate();
+        });
+        menuCivilizaciones.add(itemTiempo);
+        
         JMenuItem itemMapa = new JMenuItem("Mapa Global"); 
         itemMapa.addActionListener(e -> { 
             MapaPanel panelMapa = new MapaPanel(gestor, usuario, esAdmin); 
@@ -44,7 +53,7 @@ public class PrincipalFrame extends JFrame {
             revalidate();                             
         });                                                 
         menuCivilizaciones.add(itemMapa);
-
+        
         if (esAdmin) {
             JMenuItem itemAdmin = new JMenuItem("Administración");
             itemAdmin.addActionListener(e -> {

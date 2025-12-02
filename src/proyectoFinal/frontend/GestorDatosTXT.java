@@ -3,10 +3,13 @@ package proyectoFinal.frontend;
 import java.io.*;
 import java.util.*;
 import proyectoFinal.backend.*;
+import java.nio.charset.StandardCharsets;
 
 public class GestorDatosTXT {
     public static void cargarDesdeArchivo(GestorEnciclopedia gestor, String ruta) {
-        try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
+    	try (BufferedReader br = new BufferedReader(new InputStreamReader(
+                new FileInputStream(ruta), StandardCharsets.UTF_8))) {
+                
             String linea;
             Civilizacion civilizacionActual = null;
             List<Personaje> personajesTemp = new ArrayList<>();
