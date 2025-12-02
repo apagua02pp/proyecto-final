@@ -39,26 +39,63 @@ public class LineaTiempoGraficaPanel extends FondoPanel {
 
     private void recolectarDatos() {
         itemsOrdenados = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy G");
 
         for (Civilizacion c : gestor.getCivilizaciones()) {
-            // Foto de la civilización para usar si el evento/personaje no tiene
             String fotoCiv = c.getFotoCiv();
 
+            //Procesar Personajes
             if (c.getPersonaje() != null) {
                 for (Personaje p : c.getPersonaje()) {
-                    // Usar foto del personaje, si no hay, usar la de la civilización
-                    String fotoUsar = (p.getFotoPers() != null && !p.getFotoPers().equals("sin_foto")) ? p.getFotoPers() : fotoCiv;
-                    itemsOrdenados.add(new ItemTiempo(p.getFechaNac(), p.getNombre(), "Nacimiento (" + c.getNombre() + ")", fotoUsar, sdf.format(p.getFechaNac())));
+                    String fotoUsar = (p.getFotoPers() != null && !p.getFotoPers().equals("sin_foto")) 
+                                      ? p.getFotoPers() : fotoCiv;
+
+                    String fechaTexto = obtenerTextoAnio(p.getFechaNac());
+                    
+                    itemsOrdenados.add(new ItemTiempo(
+                        p.getFechaNac(), 
+                        p.getNombre(), 
+                        "Nacimiento (" + c.getNombre() + ")", 
+                        fotoUsar, 
+                        fechaTexto // <--- Texto corregido (ej: 3500 a.C.)
+                    ));
                 }
             }
+
+            //Procesar Eventos
             if (c.getEvento() != null) {
                 for (Evento e : c.getEvento()) {
-                    itemsOrdenados.add(new ItemTiempo(e.getFecha(), e.getTitulo(), c.getNombre(), fotoCiv, sdf.format(e.getFecha())));
+                    String fechaTexto = obtenerTextoAnio(e.getFecha());
+                    
+                    itemsOrdenados.add(new ItemTiempo(
+                        e.getFecha(), 
+                        e.getTitulo(), 
+                        c.getNombre(), 
+                        fotoCiv, 
+                        fechaTexto // <--- Texto corregido
+                    ));
                 }
             }
         }
+
+        //ordena la linea por fechas
         Collections.sort(itemsOrdenados);
+    }
+
+    // --- MÉTODO AUXILIAR NUEVO PARA FORMATEAR AÑO ---
+    private String obtenerTextoAnio(Date fecha) {
+        if (fecha == null) return "Desc.";
+        
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.setTime(fecha);
+        
+        int year = cal.get(java.util.Calendar.YEAR);
+        int era = cal.get(java.util.Calendar.ERA); // 0 es a.C. (BC), 1 es d.C. (AD)
+        
+        if (era == 0) { // Era 0 = Antes de Cristo
+            return year + " a.C.";
+        } else {        // Era 1 = Después de Cristo
+            return year + " d.C.";
+        }
     }
 
     private void initUI() {
