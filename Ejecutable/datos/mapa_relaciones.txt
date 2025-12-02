@@ -1,8 +1,9 @@
 17|Antiguo Egipto
-18|DinastÃ­a Shang (Antigua China)
-19|CivilizaciÃ³n Olmeca
+18|Dinastía Shang (Antigua China)
+19|Civilización Olmeca
 3|Imperio Romano
-4|Grecia Antigua (perÃ­odo ClÃ¡sico)
+4|Grecia Antigua (período Clásico)
 5|Imperio Bizantino
-8|CivilizaciÃ³n Sumeria
-14|CivilizaciÃ³n del Valle del Indo (Harappa)
+22|Civilización Maya
+8|Civilización Sumeria
+14|Civilización del Valle del Indo (Harappa)
