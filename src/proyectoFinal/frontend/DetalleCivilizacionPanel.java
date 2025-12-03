@@ -68,7 +68,7 @@ public class DetalleCivilizacionPanel extends FondoPanel {
             File f = new File(ruta);
             if (f.exists()) {
                 html.append("<div style='text-align: center; margin-bottom: 20px;'>");
-                html.append("<img src='").append(f.toURI()).append("' width='350'>");
+                html.append("<img src='").append(f.toURI()).append("' width='350' height='250'>");
                 html.append("</div>");
             }
         }
